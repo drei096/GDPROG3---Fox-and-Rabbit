@@ -24,8 +24,8 @@ private:
 	Vector2i mousePosWindow;
 	Font font;
 	Text ctrlUp,ctrlDown,ctrlLeft,ctrlRight,scoreText,rabbitsLeft;
-	Texture grass;
-	Sprite grassTile;
+	Texture grass, fenceHorizontal, fenceVertical, house;
+	Sprite grassTile, fenceHSprite, fenceVSprite, houseSprite;
 	Vector2i playerPos;
 
 

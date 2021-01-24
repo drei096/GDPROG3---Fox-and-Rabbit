@@ -19,7 +19,7 @@ void Level::initFont()
     this->font.loadFromFile("Pixeled.ttf");
 }
 
-void Level::initText()
+void Level::initText()  
 {
     this->ctrlDown.setFont(this->font);
     this->ctrlUp.setFont(this->font);
@@ -47,22 +47,85 @@ void Level::initText()
     //this->text.setString("Health:");
 }
 
-void Level::initTiles()
+void Level::initTiles() //we draw here the game tiles
 {
     tiles.clear();
-
-    vector<GameTile*> firstRow;
-
-    for (int i = 0; i < 20; i++)
+    
+    //GRASS
+    for (int i = 0; i < 33; i++)
     {
-        firstRow.push_back(new GameTile("grass.jpg", i*30, 0, true, false));
+        vector<GameTile*> grassRows;
+        
+        for (int j = 0; j < 33; j++)
+        {
+            grassRows.push_back(new GameTile("grass.jpg", j * 30, i * 30, true, false));
+        }
+        tiles.push_back(grassRows);
     }
 
-    
-    
+    //UPPER LEFT FENCE
+    for (int i = 0; i < 20; i++)
+    {
+        vector<GameTile*> fenceRows;
+        fenceRows.push_back(new GameTile("fence_horizontal.png", i*16, 0, false, false));
+        tiles.push_back(fenceRows);
+    }
 
-  
-    tiles.push_back(firstRow);
+    //LOWER LEFT VERTICAL FENCE
+    for (int i = 0; i < 10; i++)
+    {
+        vector<GameTile*> fenceRows;
+        fenceRows.push_back(new GameTile("fence_vertical.png", 0, 700 - i * 16, false, false));
+        tiles.push_back(fenceRows);
+    }
+
+    //LOWER LEFT FENCE
+    for (int i = 0; i < 20; i++)
+    {
+        vector<GameTile*> fenceRows;
+        fenceRows.push_back(new GameTile("fence_horizontal.png", i * 16, 700, false, false));
+        tiles.push_back(fenceRows);
+    }
+    
+    //UPPER RIGHT FENCE
+    for (int i = 0; i < 20; i++)
+    {
+        vector<GameTile*> fenceRows;
+        fenceRows.push_back(new GameTile("fence_horizontal.png", 950-16*i, 0, false, false));
+        tiles.push_back(fenceRows);
+    }
+
+    //LOWER RIGHT VERTICAL FENCE
+    for (int i = 0; i < 10; i++)
+    {
+        vector<GameTile*> fenceRows;
+        fenceRows.push_back(new GameTile("fence_vertical.png", 965, 700 - i * 16, false, false));
+        tiles.push_back(fenceRows);
+    }
+
+    //LOWER RIGHT FENCE
+    for (int i = 0; i < 20; i++)
+    {
+        vector<GameTile*> fenceRows;
+        fenceRows.push_back(new GameTile("fence_horizontal.png", 950 - 16 * i, 700, false, false));
+        tiles.push_back(fenceRows);
+    }
+
+    //UPPER LEFT VERTICAL FENCE
+    for (int i = 0; i < 10; i++)
+    {
+        vector<GameTile*> fenceRows;
+        fenceRows.push_back(new GameTile("fence_vertical.png", 0, i*16 + 16, false, false));
+        tiles.push_back(fenceRows);
+    }
+
+    //UPPER RIGHT VERTICAL FENCE
+    for (int i = 0; i < 10; i++)
+    {
+        vector<GameTile*> fenceRows;
+        fenceRows.push_back(new GameTile("fence_vertical.png", 965, i * 16 + 13, false, false));
+        tiles.push_back(fenceRows);
+    }
 }
 
 
@@ -130,7 +193,7 @@ void Level::updateGUI()
 
 void Level::initWindow()
 {
-	this->window2 = new RenderWindow(VideoMode::getDesktopMode(), "Fox And Rabbit");
+	this->window2 = new RenderWindow(VideoMode::getDesktopMode(), "Fox and Rabbit");
     this->window2->setFramerateLimit(60);
 }
 
@@ -162,42 +225,26 @@ void Level::render()
     this->window2->clear(); 
 
     //DRAW GAME OBJECTS HERE
-    //this->player.render(this->window);
-
-    /*
-    for (auto* enemy : this->enemies)
+   
+    this->renderGUI(this->window2);  //GUI
+    this->exitButton.renderButton(this->window2, "Exit!", 1050.0f, 600.0f, 1145.0f, 635.0f); //EXIT BUTTON
+    
+    //DRAW GRASS
+    for (int i = 0; i < 33; i++)
     {
-        enemy->render(this->window);
+        for (int j = 0; j < 33; j++)
+        {
+            this->window2->draw(this->tiles[i][j]->sprite); 
+        }
     }
-    */
-    //this->singleEnemy.render(this->window);
-    //this->singleEnemy.render(this->window);
-    
-    
-    //enemies[0].render(this->window);
-    /*
-    for (int i=0;i<this->enemies.size();i++)
-    {
-        enemies[i].render(this->window);
-        //i.render(this->window);
-    }
-    */
-    
 
-    this->renderGUI(this->window2);
-    this->exitButton.renderButton(this->window2, "Exit!", 1050.0f, 600.0f, 1145.0f, 635.0f);
-    
-    
-    
-    for (int i = 0; i < this->gridLength; i++)
+    //DRAW FENCES
+    for (int i = 0; i < 120; i++)
     {
-        this->window2->draw(this->tiles[0][i]->sprite);
+        this->window2->draw(this->tiles[33+i][0]->sprite); 
     }
     
-
-    //this->enemy.render(this->window);
-    //this->window->draw(this->enemy);
-
+    
     this->window2->display();
 }
 
