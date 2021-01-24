@@ -12,6 +12,7 @@
 #include <SFML/Network.hpp>
 
 #include "Button.h"
+#include "GameTile.h"
 using namespace sf;
 using namespace std;
 
@@ -23,13 +24,17 @@ private:
 	Vector2i mousePosWindow;
 	Font font;
 	Text ctrlUp,ctrlDown,ctrlLeft,ctrlRight,scoreText,rabbitsLeft;
+	Texture grass;
+	Sprite grassTile;
+	Vector2i playerPos;
 
-	//RectangleShape enemy;
-	
+
+	vector<vector<GameTile*>> tiles;
+	vector<Vector2i>enemyPos;
 	
 
 	float maxSpawnTimer, spawnTimer;
-	int maxEnemies;
+	int maxEnemies, gridLength;
 
 public:
 	Button exitButton;
@@ -38,6 +43,8 @@ private:
 	void initWindow();
 	void initFont();
 	void initText();
+	void initTiles();
+	
 	//void generateEnemy();
 public:
 	Level();

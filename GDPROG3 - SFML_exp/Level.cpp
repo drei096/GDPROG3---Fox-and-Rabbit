@@ -10,6 +10,8 @@ void Level::initVars()
     this->maxSpawnTimer = 10.0f;
     this->spawnTimer = this->maxSpawnTimer;
     this->maxEnemies = 10;
+    this->gridLength = 20;
+    this->playerPos = Vector2i(this->gridLength-1, this->gridLength-1);
 }
 
 void Level::initFont()
@@ -44,6 +46,25 @@ void Level::initText()
     //this->text.setPosition(20.0f, 20.0f);
     //this->text.setString("Health:");
 }
+
+void Level::initTiles()
+{
+    tiles.clear();
+
+    vector<GameTile*> firstRow;
+
+    for (int i = 0; i < 20; i++)
+    {
+        firstRow.push_back(new GameTile("grass.jpg", i*30, 0, true, false));
+    }
+
+    
+    
+
+  
+    tiles.push_back(firstRow);
+}
+
 
 /*
 void Game::spawnEnemies()
@@ -121,6 +142,8 @@ Level::Level()
     this->initFont();
     this->initText();
     this->exitButton.initFont(this->font);
+    this->initTiles();
+    
     this->initEnemies();
     //this->generateEnemy();
 }
@@ -159,9 +182,19 @@ void Level::render()
         //i.render(this->window);
     }
     */
+    
 
     this->renderGUI(this->window2);
     this->exitButton.renderButton(this->window2, "Exit!", 1050.0f, 600.0f, 1145.0f, 635.0f);
+    
+    
+    
+    for (int i = 0; i < this->gridLength; i++)
+    {
+        this->window2->draw(this->tiles[0][i]->sprite);
+    }
+    
+
     //this->enemy.render(this->window);
     //this->window->draw(this->enemy);
 
@@ -201,13 +234,7 @@ void Level::pollEvents()
         case Event::KeyPressed:
             if (this->event.key.code == Keyboard::Escape)
                 this->window2->close();
-            break;
-        case Event::TextEntered:
-            if (event.text.unicode < 128)
-            {
-                printf("%c", event.text.unicode);
-            }
-            break;
+            break;  
         case Event::MouseMoved:
             if (exitButton.isMouseHover(*window2))
             {
