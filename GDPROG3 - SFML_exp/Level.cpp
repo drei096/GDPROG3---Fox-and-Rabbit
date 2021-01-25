@@ -298,6 +298,9 @@ void Level::render()
     this->window2->draw(this->house2Sprite);
     this->window2->draw(this->house3Sprite);
 
+    //DRAW FOX
+    this->player.render(this->window2);
+
     this->window2->display();
 }
 
@@ -334,6 +337,14 @@ void Level::pollEvents()
         case Event::KeyPressed:
             if (this->event.key.code == Keyboard::Escape)
                 this->window2->close();
+            if (this->event.key.code == Keyboard::W)
+                this->player.move(0, -100);
+            if (this->event.key.code == Keyboard::A)
+                this->player.move(-100, 0);
+            if (this->event.key.code == Keyboard::S)
+                this->player.move(0, 100);
+            if (this->event.key.code == Keyboard::D)
+                this->player.move(100, 0);
             break;  
         case Event::MouseMoved:
             if (exitButton.isMouseHover(*window2))

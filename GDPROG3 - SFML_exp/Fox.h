@@ -1,5 +1,4 @@
 #pragma once
-
 #include<iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -9,32 +8,18 @@
 
 using namespace std;
 using namespace sf;
-
-class Entity
-{
-public:
-	virtual void move(int playerX, int playerY) = 0;
-	virtual void render(RenderTarget* target) = 0;
-};
-
-class Fox : public Entity
+class Fox
 {
 private:
 	Texture foxTexture;
 	Sprite foxSprite;
 	int foxScore;
-	Vector2i playerPos;
-
-private:
+	Vector2f playerPos;
+public:
 	void move(int playerX, int playerY);
 	void render(RenderTarget* target);
-
-public:
-	Fox(string, int, int);
-	void setSprite(string);
+	Fox();
+	void setSprite();
+	Vector2f setInitPos(float x, float y);
 };
 
-class Rabbit : public Entity
-{
-
-};
