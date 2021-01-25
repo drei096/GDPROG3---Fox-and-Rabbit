@@ -3,6 +3,7 @@
 void Fox::move(int playerX, int playerY)
 {
 	this->foxSprite.setPosition(playerPos.x + playerX, playerPos.y + playerY);
+	playerPos = Vector2f(playerPos.x + playerX, playerPos.y + playerY);
 }
 
 void Fox::render(RenderTarget* target)
@@ -13,7 +14,7 @@ void Fox::render(RenderTarget* target)
 Fox::Fox()
 {
 	this->setSprite();
-	playerPos = this->setInitPos(100.0f, 100.0f);
+	playerPos = this->setInitPos(60.0f, 15.0f);
 	foxScore = 0;
 }
 

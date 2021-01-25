@@ -52,7 +52,7 @@ void Game::renderBg()
 
 void Game::initWindow()
 {
-    this->window = new RenderWindow(VideoMode::getDesktopMode(), "Fox and Rabbit");
+    this->window = new RenderWindow(VideoMode(1280,720), "Fox and Rabbit");
     this->window->setFramerateLimit(60);
 }
 

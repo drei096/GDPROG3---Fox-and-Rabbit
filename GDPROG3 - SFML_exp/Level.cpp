@@ -86,7 +86,7 @@ void Level::initTiles() //we draw here the game tiles
     for (int i = 0; i < 20; i++)
     {
         vector<GameTile*> fenceRows;
-        fenceRows.push_back(new GameTile("fence_horizontal.png", i * 16, 730, false, false));
+        fenceRows.push_back(new GameTile("fence_horizontal.png", i * 16, 700, false, false));
         tiles.push_back(fenceRows);
     }
     
@@ -110,7 +110,7 @@ void Level::initTiles() //we draw here the game tiles
     for (int i = 0; i < 20; i++)
     {
         vector<GameTile*> fenceRows;
-        fenceRows.push_back(new GameTile("fence_horizontal.png", 950 - 16 * i, 730, false, false));
+        fenceRows.push_back(new GameTile("fence_horizontal.png", 950 - 16 * i, 700, false, false));
         tiles.push_back(fenceRows);
     }
 
@@ -136,7 +136,7 @@ void Level::initTiles() //we draw here the game tiles
         vector<GameTile*> dirtRows;
         for (int j = 1; j <= 20; j++)
         {
-            dirtRows.push_back(new GameTile("dirt.png", j * 40 + 35, 35*i, true, false));
+            dirtRows.push_back(new GameTile("dirt.png", j * 37 + 45, 34*i, true, false));
         }
         dirt.push_back(dirtRows);
     }
@@ -208,26 +208,26 @@ void Level::renderGUI(RenderTarget *target)
 void Level::updateGUI()
 {
    this->ctrlUp.setString("W: Up");
-   this->ctrlUp.setPosition(1150.0f, 50.0f);
+   this->ctrlUp.setPosition(1000.0f, 50.0f);
    this->ctrlDown.setString("A: Left");
-   this->ctrlDown.setPosition(1150.0f, 100.0f);
+   this->ctrlDown.setPosition(1000.0f, 100.0f);
    this->ctrlLeft.setString("S: Down");
-   this->ctrlLeft.setPosition(1150.0f, 150.0f);
+   this->ctrlLeft.setPosition(1000.0f, 150.0f);
    this->ctrlRight.setString("D: Right");
-   this->ctrlRight.setPosition(1150.0f, 200.0f);
+   this->ctrlRight.setPosition(1000.0f, 200.0f);
 
    this->scoreText.setString("Score:");
    this->scoreText.setColor(Color::Green);
-   this->scoreText.setPosition(1100.0f, 300.0f);
+   this->scoreText.setPosition(1000.0f, 300.0f);
    this->rabbitsLeft.setString("Rabbits:");
    this->rabbitsLeft.setColor(Color::Green);
-   this->rabbitsLeft.setPosition(1100.0f, 350.0f);
+   this->rabbitsLeft.setPosition(1000.0f, 350.0f);
 }
 
 
 void Level::initWindow()
 {
-	this->window2 = new RenderWindow(VideoMode::getDesktopMode(), "Fox and Rabbit");
+	this->window2 = new RenderWindow(VideoMode(1280,720), "Fox and Rabbit");
     this->window2->setFramerateLimit(60);
 }
 
@@ -271,12 +271,6 @@ void Level::render()
             this->window2->draw(this->tiles[i][j]->sprite); 
         }
     }
-
-    //DRAW FENCES
-    for (int i = 0; i < 120; i++)
-    {
-        this->window2->draw(this->tiles[33+i][0]->sprite); 
-    }
     
     //DRAW DIRT TILES
     for (int i = 0; i < 20; i++)
@@ -285,6 +279,12 @@ void Level::render()
         {
             this->window2->draw(this->dirt[i][j]->sprite);
         }
+    }
+
+    //DRAW FENCES
+    for (int i = 0; i < 120; i++)
+    {
+        this->window2->draw(this->tiles[33 + i][0]->sprite);
     }
 
     //DRAW TREES
@@ -338,13 +338,40 @@ void Level::pollEvents()
             if (this->event.key.code == Keyboard::Escape)
                 this->window2->close();
             if (this->event.key.code == Keyboard::W)
-                this->player.move(0, -100);
+            {
+                if (this->player.playerPos.y <= 15)
+                {
+                    this->player.playerPos.y = 15;
+                }
+                else
+                    this->player.move(0, -34);
+            }
+                
             if (this->event.key.code == Keyboard::A)
-                this->player.move(-100, 0);
+            {
+                if (this->player.playerPos.x <= 60)
+                {
+                    this->player.playerPos.x = 60;
+                }
+                else
+                    this->player.move(-37, 0);
+            }
+                
             if (this->event.key.code == Keyboard::S)
-                this->player.move(0, 100);
+            {
+                if (this->player.playerPos.y >= 680)
+                    this->player.playerPos.y = 680;
+                else
+                    this->player.move(0, 34);
+            }
+            
             if (this->event.key.code == Keyboard::D)
-                this->player.move(100, 0);
+            {
+                if (this->player.playerPos.x >= 785)
+                    this->player.playerPos.x = 785;
+                else
+                    this->player.move(37, 0);
+            }
             break;  
         case Event::MouseMoved:
             if (exitButton.isMouseHover(*window2))

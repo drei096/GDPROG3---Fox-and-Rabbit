@@ -14,6 +14,7 @@ private:
 	Texture foxTexture;
 	Sprite foxSprite;
 	int foxScore;
+public:
 	Vector2f playerPos;
 public:
 	void move(int playerX, int playerY);
