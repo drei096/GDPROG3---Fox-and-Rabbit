@@ -261,7 +261,7 @@ void Level::render()
     //DRAW GAME OBJECTS HERE
    
     this->renderGUI(this->window2);  //GUI
-    this->exitButton.renderButton(this->window2, "Exit!", 1050.0f, 600.0f, 1145.0f, 635.0f); //EXIT BUTTON
+    this->exitButton.renderButton(this->window2, "Exit!", 1050.0f, 600.0f, 1095.0f, 635.0f); //EXIT BUTTON
     
     //DRAW GRASS
     for (int i = 0; i < 33; i++)
@@ -300,6 +300,7 @@ void Level::render()
 
     //DRAW FOX
     this->player.render(this->window2);
+    this->enem.render(this->window2);
 
     this->window2->display();
 }

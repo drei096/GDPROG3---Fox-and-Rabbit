@@ -63,5 +63,5 @@ bool Button::isMouseHover(RenderWindow &window)
 
 void Button::initShape()
 {
-	this->button.setSize(Vector2f(300.0f, 100.0f));
+	this->button.setSize(Vector2f(200.0f, 100.0f));
 }

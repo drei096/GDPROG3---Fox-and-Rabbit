@@ -14,6 +14,7 @@
 #include "Button.h"
 #include "GameTile.h"
 #include "Fox.h"
+#include "Rabbit.h"
 using namespace sf;
 using namespace std;
 
@@ -28,6 +29,7 @@ private:
 	Texture grass, fenceHorizontal, fenceVertical, house, house2, house3;
 	Sprite grassTile, fenceHSprite, fenceVSprite, houseSprite, house2Sprite, house3Sprite;
 	Fox player;
+	Rabbit enem;
 
 	vector<vector<GameTile*>> tiles;
 	vector<vector<GameTile*>> dirt;

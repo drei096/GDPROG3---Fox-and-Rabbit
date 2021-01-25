@@ -85,8 +85,8 @@ void Game::render()
     this->renderBg();
 
     this->renderGUI(this->window);
-    this->button1.renderButton(this->window, "Play!", 530, 190, 630, 230);
-    this->button2.renderButton(this->window, "Exit!", 530, 600, 630, 640);
+    this->button1.renderButton(this->window, "Play!", 530, 190, 575, 230);
+    this->button2.renderButton(this->window, "Exit!", 530, 600, 575, 640);
     //this->enemy.render(this->window);
     //this->window->draw(this->enemy);
 
