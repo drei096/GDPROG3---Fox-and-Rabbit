@@ -16,8 +16,10 @@ private:
 	int foxScore;
 public:
 	Vector2f playerPos;
+	IntRect foxMove;
 public:
 	void move(int playerX, int playerY);
+	void spriteMove(int left, int top);
 	void render(RenderTarget* target);
 	Fox();
 	void setSprite();

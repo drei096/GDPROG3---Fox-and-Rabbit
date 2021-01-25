@@ -16,7 +16,10 @@ private:
 	Sprite rabbitSprite;
 public:
 	Vector2f rabbitPos;
+	IntRect rabbitMove;
 public:
+	void move(int playerX, int playerY);
+	void spriteMove(int left, int top);
 	void render(RenderTarget* target);
 	Rabbit();
 	void setSprite();

@@ -1,4 +1,5 @@
 #include<iostream>
+#include <ctime>
 #include "Level.h"
 
 using namespace sf;
@@ -9,9 +10,10 @@ void Level::initVars()
 	this->window2 = nullptr;
     this->maxSpawnTimer = 10.0f;
     this->spawnTimer = this->maxSpawnTimer;
-    this->maxEnemies = 10;
+    this->maxEnemies = 50;
     this->gridLength = 20;
-    
+    this->moves = 0;
+    this->currentEnemies = 3;
 }
 
 void Level::initFont()
@@ -136,7 +138,7 @@ void Level::initTiles() //we draw here the game tiles
         vector<GameTile*> dirtRows;
         for (int j = 1; j <= 20; j++)
         {
-            dirtRows.push_back(new GameTile("dirt.png", j * 37 + 45, 34*i, true, false));
+            dirtRows.push_back(new GameTile("dirt.png", i * 37 + 45, 34 * j, true, false));
         }
         dirt.push_back(dirtRows);
     }
@@ -247,6 +249,23 @@ Level::Level()
 
 void Level::update()
 {
+    //rabbit updater every 3 moves
+    if (moves == 3) {
+        currentEnemies *= 2;
+        moves = 0;
+    }
+
+    //check if rabbits are 50 and above
+    if (currentEnemies >= maxEnemies) 
+    {
+        this->window2->close();
+    }
+    //check if no more rabbits
+    else if (currentEnemies == 0) 
+    {
+        this->window2->close();
+    }
+
     this->pollEvents();
     //this->spawnEnemies();
 
@@ -300,7 +319,33 @@ void Level::render()
 
     //DRAW FOX
     this->player.render(this->window2);
-    this->enem.render(this->window2);
+
+    //DRAW INITIAL RABBITS
+    for (int i = 0; i < currentEnemies; i++) {
+        this->enem[i].render(this->window2);
+        //check if rabbit spawns on player tile
+        if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y)) 
+        {
+            for (int j = i; j < (currentEnemies - 1); j++)
+                enem[j] = enem[j + 1];
+            i--;
+        }
+        //check if rabbit spawns on top of another rabbit
+        //ISSUES: Naghhang pag masyado na maraming rabbit
+        /*
+        for (int k = 0; k < i; k++) 
+        {
+            if ((enem[k].rabbitPos.x == enem[i].rabbitPos.x) && (enem[k].rabbitPos.y == enem[i].rabbitPos.y))
+            {
+                for (int j = i; j < (currentEnemies - 1); j++) 
+                {
+                    enem[j] = enem[j + 1];
+                }
+                i--;
+            }
+        }
+        */
+    }
 
     this->window2->display();
 }
@@ -328,69 +373,158 @@ void Level::pollEvents()
     {
         switch (this->event.type)
         {
-        case Event::Closed:
-            this->window2->close();
-            break;
-        case Event::Resized:
-            //prints window width and height after resize
-            cout << "New window width:" << event.size.width << "   New window height:" << event.size.height << endl;
-            break;
-        case Event::KeyPressed:
-            if (this->event.key.code == Keyboard::Escape)
-                this->window2->close();
-            if (this->event.key.code == Keyboard::W)
-            {
-                if (this->player.playerPos.y <= 15)
-                {
-                    this->player.playerPos.y = 15;
-                }
-                else
-                    this->player.move(0, -34);
-            }
-                
-            if (this->event.key.code == Keyboard::A)
-            {
-                if (this->player.playerPos.x <= 60)
-                {
-                    this->player.playerPos.x = 60;
-                }
-                else
-                    this->player.move(-37, 0);
-            }
-                
-            if (this->event.key.code == Keyboard::S)
-            {
-                if (this->player.playerPos.y >= 680)
-                    this->player.playerPos.y = 680;
-                else
-                    this->player.move(0, 34);
-            }
-            
-            if (this->event.key.code == Keyboard::D)
-            {
-                if (this->player.playerPos.x >= 785)
-                    this->player.playerPos.x = 785;
-                else
-                    this->player.move(37, 0);
-            }
-            break;  
-        case Event::MouseMoved:
-            if (exitButton.isMouseHover(*window2))
-            {
-                exitButton.setBackColor(Color::Cyan);
-            }
-            else
-            {
-                exitButton.setBackColor(Color::White);
-            }
-            break;
-        case Event::MouseButtonPressed:
-            if (exitButton.isMouseHover(*window2))
+            case Event::Closed: 
             {
                 this->window2->close();
+                break;
             }
-        default:
-            break;
+            case Event::Resized: 
+            {
+                //prints window width and height after resize
+                cout << "New window width:" << event.size.width << "   New window height:" << event.size.height << endl;
+                break;
+            }
+            case Event::KeyPressed:
+            {
+                cout << "Rabbits:" << currentEnemies << endl;
+                if (this->event.key.code == Keyboard::Escape)
+                    this->window2->close();
+                if (this->event.key.code == Keyboard::W)
+                {
+                    this->player.spriteMove(10, 3);
+                    if (this->player.playerPos.y <= 15)
+                    {
+                        this->player.playerPos.y = player.playerPos.y;
+                    }
+                    else
+                        this->player.move(0, -34);
+                }
+
+                if (this->event.key.code == Keyboard::A)
+                {
+                    this->player.spriteMove(10, 1);
+                    if (this->player.playerPos.x <= 75)
+                    {
+                        this->player.playerPos.x = player.playerPos.x;
+                    }
+                    else
+                        this->player.move(-37, 0);
+                }
+
+                if (this->event.key.code == Keyboard::S)
+                {
+                    this->player.spriteMove(10, 0);
+                    if (this->player.playerPos.y >= 646)
+                        this->player.playerPos.y = player.playerPos.y;
+                    else
+                        this->player.move(0, 34);
+                }
+
+                if (this->event.key.code == Keyboard::D)
+                {
+                    this->player.spriteMove(10, 2);
+                    if (this->player.playerPos.x >= 748)
+                        this->player.playerPos.x = player.playerPos.x;
+                    else
+                        this->player.move(37, 0);
+                }
+
+                //Eats rabbit when fox ends up in same tile with rabbit (fox moves to same tile)
+                for (int i = 0; i < currentEnemies; i++)
+                {
+                    if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y))
+                    {
+                        for (int j = i; j < (currentEnemies - 1); j++)
+                            enem[j] = enem[j + 1];
+                        i--;
+                        currentEnemies--;
+                    }
+                }
+
+                //3 rabbits movement
+                for (int i = 0; i < currentEnemies; i++)
+                {
+                    int rMove = rand() % 4;
+                    //Upwards
+                    if (rMove == 0) {
+                        this->enem[i].spriteMove(0, 0);
+                        if (this->enem[i].rabbitPos.y <= 15)
+                        {
+                            this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                        }
+                        else
+                            this->enem[i].move(0, -34);
+                    }
+                    //Left
+                    if (rMove == 1) {
+                        this->enem[i].spriteMove(0, 1);
+                        if (this->enem[i].rabbitPos.x <= 62)
+                        {
+                            this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
+                        }
+                        else
+                            this->enem[i].move(-37, 0);
+                    }
+                    //Down
+                    if (rMove == 2) {
+                        this->enem[i].spriteMove(0, 2);
+                        if (this->enem[i].rabbitPos.y >= 646)
+                        {
+                            this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                        }
+                        else
+                            this->enem[i].move(0, 34);
+                    }
+                    //Right
+                    if (rMove == 3) {
+                        this->enem[i].spriteMove(0, 3);
+                        if (this->enem[i].rabbitPos.x >= 735)
+                        {
+                            this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
+                        }
+                        else
+                            this->enem[i].move(37, 0);
+                    }
+                }
+
+
+                //Eats rabbit when fox ends up in same tile with rabbit (Collision)
+                for (int i = 0; i < currentEnemies; i++) 
+                {
+                    if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y)) 
+                    {
+                        for(int j = i; j < (currentEnemies-1); j++)
+                            enem[j] = enem[j+1];
+                        i--;
+                        currentEnemies--;
+                    }
+                }
+                moves++;
+                break;
+            }
+            case Event::MouseMoved:
+            {
+                if (exitButton.isMouseHover(*window2))
+                {
+                    exitButton.setBackColor(Color::Cyan);
+                }
+                else
+                {
+                    exitButton.setBackColor(Color::White);
+                }
+                break;
+            }
+            case Event::MouseButtonPressed: 
+            {
+                if (exitButton.isMouseHover(*window2))
+                {
+                    this->window2->close();
+                }
+            }
+            default: 
+            {
+                break;
+            }
         }
     }
 }

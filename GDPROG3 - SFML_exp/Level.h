@@ -29,7 +29,7 @@ private:
 	Texture grass, fenceHorizontal, fenceVertical, house, house2, house3;
 	Sprite grassTile, fenceHSprite, fenceVSprite, houseSprite, house2Sprite, house3Sprite;
 	Fox player;
-	Rabbit enem;
+	Rabbit enem[100];
 
 	vector<vector<GameTile*>> tiles;
 	vector<vector<GameTile*>> dirt;
@@ -38,7 +38,7 @@ private:
 	
 
 	float maxSpawnTimer, spawnTimer;
-	int maxEnemies, gridLength;
+	int maxEnemies, gridLength, moves, currentEnemies;
 
 public:
 	Button exitButton;
