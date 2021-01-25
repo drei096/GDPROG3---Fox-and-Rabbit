@@ -11,7 +11,7 @@ void Level::initVars()
     this->spawnTimer = this->maxSpawnTimer;
     this->maxEnemies = 10;
     this->gridLength = 20;
-    this->playerPos = Vector2i(this->gridLength-1, this->gridLength-1);
+    
 }
 
 void Level::initFont()
@@ -50,6 +50,9 @@ void Level::initText()
 void Level::initTiles() //we draw here the game tiles
 {
     tiles.clear();
+    dirt.clear();
+    trees.clear();
+    
     
     //GRASS
     for (int i = 0; i < 33; i++)
@@ -75,7 +78,7 @@ void Level::initTiles() //we draw here the game tiles
     for (int i = 0; i < 10; i++)
     {
         vector<GameTile*> fenceRows;
-        fenceRows.push_back(new GameTile("fence_vertical.png", 0, 700 - i * 16, false, false));
+        fenceRows.push_back(new GameTile("fence_vertical.png", 0, 730 - i * 16, false, false));
         tiles.push_back(fenceRows);
     }
 
@@ -83,7 +86,7 @@ void Level::initTiles() //we draw here the game tiles
     for (int i = 0; i < 20; i++)
     {
         vector<GameTile*> fenceRows;
-        fenceRows.push_back(new GameTile("fence_horizontal.png", i * 16, 700, false, false));
+        fenceRows.push_back(new GameTile("fence_horizontal.png", i * 16, 730, false, false));
         tiles.push_back(fenceRows);
     }
     
@@ -99,7 +102,7 @@ void Level::initTiles() //we draw here the game tiles
     for (int i = 0; i < 10; i++)
     {
         vector<GameTile*> fenceRows;
-        fenceRows.push_back(new GameTile("fence_vertical.png", 965, 700 - i * 16, false, false));
+        fenceRows.push_back(new GameTile("fence_vertical.png", 965, 730 - i * 16, false, false));
         tiles.push_back(fenceRows);
     }
 
@@ -107,7 +110,7 @@ void Level::initTiles() //we draw here the game tiles
     for (int i = 0; i < 20; i++)
     {
         vector<GameTile*> fenceRows;
-        fenceRows.push_back(new GameTile("fence_horizontal.png", 950 - 16 * i, 700, false, false));
+        fenceRows.push_back(new GameTile("fence_horizontal.png", 950 - 16 * i, 730, false, false));
         tiles.push_back(fenceRows);
     }
 
@@ -126,6 +129,37 @@ void Level::initTiles() //we draw here the game tiles
         fenceRows.push_back(new GameTile("fence_vertical.png", 965, i * 16 + 13, false, false));
         tiles.push_back(fenceRows);
     }
+
+    //20x20 DIRT TILES
+    for (int i = 1; i <= 20; i++)
+    {
+        vector<GameTile*> dirtRows;
+        for (int j = 1; j <= 20; j++)
+        {
+            dirtRows.push_back(new GameTile("dirt.png", j * 40 + 35, 35*i, true, false));
+        }
+        dirt.push_back(dirtRows);
+    }
+
+    //LEFT TREES
+    for (int i = 0; i < 24; i++)
+    {
+        vector<GameTile*> treeRows;
+        treeRows.push_back(new GameTile("trees_2.png", 0, i * 16 + 190, false, false));
+        trees.push_back(treeRows);
+    }
+
+    this->house.loadFromFile("house.png");
+    this->houseSprite.setTexture(house);
+    this->houseSprite.setPosition(870.0f, 160.0f);
+
+    this->house2.loadFromFile("house3.png");
+    this->house2Sprite.setTexture(house2);
+    this->house2Sprite.setPosition(330.0f, -60.0f);
+
+    this->house3.loadFromFile("house3.png");
+    this->house3Sprite.setTexture(house3);
+    this->house3Sprite.setPosition(590.0f, -60.0f);
 }
 
 
@@ -244,7 +278,26 @@ void Level::render()
         this->window2->draw(this->tiles[33+i][0]->sprite); 
     }
     
+    //DRAW DIRT TILES
+    for (int i = 0; i < 20; i++)
+    {
+        for (int j = 0; j < 20; j++)
+        {
+            this->window2->draw(this->dirt[i][j]->sprite);
+        }
+    }
+
+    //DRAW TREES
+    for (int i = 0; i < 24; i++)
+    {
+        this->window2->draw(this->trees[i][0]->sprite);
+    }
     
+    //DRAW HOUSE
+    this->window2->draw(this->houseSprite);
+    this->window2->draw(this->house2Sprite);
+    this->window2->draw(this->house3Sprite);
+
     this->window2->display();
 }
 

@@ -13,6 +13,7 @@
 
 #include "Button.h"
 #include "GameTile.h"
+#include "Entity.h"
 using namespace sf;
 using namespace std;
 
@@ -24,12 +25,13 @@ private:
 	Vector2i mousePosWindow;
 	Font font;
 	Text ctrlUp,ctrlDown,ctrlLeft,ctrlRight,scoreText,rabbitsLeft;
-	Texture grass, fenceHorizontal, fenceVertical, house;
-	Sprite grassTile, fenceHSprite, fenceVSprite, houseSprite;
-	Vector2i playerPos;
+	Texture grass, fenceHorizontal, fenceVertical, house, house2, house3;
+	Sprite grassTile, fenceHSprite, fenceVSprite, houseSprite, house2Sprite, house3Sprite;
 
 
 	vector<vector<GameTile*>> tiles;
+	vector<vector<GameTile*>> dirt;
+	vector<vector<GameTile*>> trees;
 	vector<Vector2i>enemyPos;
 	
 
@@ -38,6 +40,8 @@ private:
 
 public:
 	Button exitButton;
+	
+
 private:
 	void initVars();
 	void initWindow();
