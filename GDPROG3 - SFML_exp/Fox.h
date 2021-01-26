@@ -13,10 +13,10 @@ class Fox
 private:
 	Texture foxTexture;
 	Sprite foxSprite;
-	int foxScore;
 public:
 	Vector2f playerPos;
 	IntRect foxMove;
+	int foxScore;
 public:
 	void move(int playerX, int playerY);
 	void spriteMove(int left, int top);

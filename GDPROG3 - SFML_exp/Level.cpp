@@ -27,22 +27,32 @@ void Level::initText()
     this->ctrlUp.setFont(this->font);
     this->ctrlLeft.setFont(this->font);
     this->ctrlRight.setFont(this->font);
-    this->scoreText.setFont(this->font);
-    this->rabbitsLeft.setFont(this->font);
+    this->scoreText1.setFont(this->font);
+    this->rabbitsLeft1.setFont(this->font);
+    this->scoreText2.setFont(this->font);
+    this->rabbitsLeft2.setFont(this->font);
+    this->gameLost.setFont(this->font);
+    this->gameWon.setFont(this->font);
 
     this->ctrlDown.setFillColor(Color::White);
     this->ctrlUp.setFillColor(Color::White);
     this->ctrlLeft.setFillColor(Color::White);
     this->ctrlRight.setFillColor(Color::White);
-    this->scoreText.setFillColor(Color::White);
-    this->rabbitsLeft.setFillColor(Color::White);
+    this->scoreText1.setFillColor(Color::White);
+    this->rabbitsLeft1.setFillColor(Color::White);
+    this->scoreText2.setFillColor(Color::White);
+    this->rabbitsLeft2.setFillColor(Color::White);
 
     this->ctrlDown.setCharacterSize(24);
     this->ctrlUp.setCharacterSize(24);
     this->ctrlLeft.setCharacterSize(24);
     this->ctrlRight.setCharacterSize(24);
-    this->scoreText.setCharacterSize(24);
-    this->rabbitsLeft.setCharacterSize(24);
+    this->scoreText1.setCharacterSize(24);
+    this->rabbitsLeft1.setCharacterSize(24);
+    this->scoreText2.setCharacterSize(24);
+    this->rabbitsLeft2.setCharacterSize(24);
+    this->gameLost.setCharacterSize(24);
+    this->gameWon.setCharacterSize(24);
     
     
     //this->text.setPosition(20.0f, 20.0f);
@@ -203,12 +213,18 @@ void Level::renderGUI(RenderTarget *target)
     target->draw(this->ctrlDown);
     target->draw(this->ctrlLeft);
     target->draw(this->ctrlRight);
-    target->draw(this->scoreText);
-    target->draw(this->rabbitsLeft);
+    target->draw(this->scoreText1);
+    target->draw(this->rabbitsLeft1);
+    target->draw(this->scoreText2);
+    target->draw(this->rabbitsLeft2);
 }
 
 void Level::updateGUI()
 {
+    string score, enemCount;
+    score = to_string(this->player.foxScore);
+    enemCount = to_string(currentEnemies);
+
    this->ctrlUp.setString("W: Up");
    this->ctrlUp.setPosition(1000.0f, 50.0f);
    this->ctrlDown.setString("A: Left");
@@ -218,12 +234,18 @@ void Level::updateGUI()
    this->ctrlRight.setString("D: Right");
    this->ctrlRight.setPosition(1000.0f, 200.0f);
 
-   this->scoreText.setString("Score:");
-   this->scoreText.setColor(Color::Green);
-   this->scoreText.setPosition(1000.0f, 300.0f);
-   this->rabbitsLeft.setString("Rabbits:");
-   this->rabbitsLeft.setColor(Color::Green);
-   this->rabbitsLeft.setPosition(1000.0f, 350.0f);
+   this->scoreText1.setString("Score:");
+   this->scoreText1.setColor(Color::Green);
+   this->scoreText1.setPosition(1000.0f, 300.0f);
+   this->scoreText2.setString(score);
+   this->scoreText2.setColor(Color::Green);
+   this->scoreText2.setPosition(1200.0f, 300.0f);
+   this->rabbitsLeft1.setString("Rabbits:");
+   this->rabbitsLeft1.setColor(Color::Green);
+   this->rabbitsLeft1.setPosition(1000.0f, 350.0f);
+   this->rabbitsLeft2.setString(enemCount);
+   this->rabbitsLeft2.setColor(Color::Green);
+   this->rabbitsLeft2.setPosition(1200.0f, 350.0f);
 }
 
 
@@ -258,7 +280,7 @@ void Level::update()
     //check if rabbits are 50 and above
     if (currentEnemies >= maxEnemies) 
     {
-        this->window2->close();
+        this->isGameOver = 1;
     }
     //check if no more rabbits
     else if (currentEnemies == 0) 
@@ -330,6 +352,7 @@ void Level::render()
                 enem[j] = enem[j + 1];
             i--;
         }
+
         //check if rabbit spawns on top of another rabbit
         //ISSUES: Naghhang pag masyado na maraming rabbit
         /*
@@ -386,7 +409,6 @@ void Level::pollEvents()
             }
             case Event::KeyPressed:
             {
-                cout << "Rabbits:" << currentEnemies << endl;
                 if (this->event.key.code == Keyboard::Escape)
                     this->window2->close();
                 if (this->event.key.code == Keyboard::W)
@@ -438,6 +460,7 @@ void Level::pollEvents()
                             enem[j] = enem[j + 1];
                         i--;
                         currentEnemies--;
+                        this->player.foxScore++;
                     }
                 }
 
@@ -497,6 +520,7 @@ void Level::pollEvents()
                             enem[j] = enem[j+1];
                         i--;
                         currentEnemies--;
+                        this->player.foxScore++;
                     }
                 }
                 moves++;

@@ -25,16 +25,19 @@ private:
 	Event event;
 	Vector2i mousePosWindow;
 	Font font;
-	Text ctrlUp,ctrlDown,ctrlLeft,ctrlRight,scoreText,rabbitsLeft;
+	Text ctrlUp,ctrlDown,ctrlLeft,ctrlRight,scoreText1, scoreText2, rabbitsLeft1, rabbitsLeft2;
+	Text gameWon, gameLost;
 	Texture grass, fenceHorizontal, fenceVertical, house, house2, house3;
 	Sprite grassTile, fenceHSprite, fenceVSprite, houseSprite, house2Sprite, house3Sprite;
 	Fox player;
 	Rabbit enem[100];
+	int isGameOver = 0;
 
 	vector<vector<GameTile*>> tiles;
 	vector<vector<GameTile*>> dirt;
 	vector<vector<GameTile*>> trees;
 	vector<Vector2i>enemyPos;
+	
 	
 
 	float maxSpawnTimer, spawnTimer;
