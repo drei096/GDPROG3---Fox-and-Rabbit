@@ -43,6 +43,7 @@ void Game::updateGUI(string text,float posX, float posY)
     this->text.setString(ss.str());
     this->text.setPosition(posX, posY);
     this->text.setCharacterSize(35);
+    this->text.setOutlineThickness(2);
 }
 
 void Game::renderBg()
@@ -65,6 +66,10 @@ Game::Game()
     this->button1.initFont(this->font);
     this->button2.initFont(this->font);
     this->initText();
+    this->mmMusic.openFromFile("main_menu_use.ogg");
+    this->mmMusic.setVolume(20);
+    this->mmMusic.play();
+    this->mmMusic.setLoop(true);
     //this->generateEnemy();
 }
 
@@ -74,7 +79,7 @@ void Game::update()
     //this->spawnEnemies();
     this->updateMousePos();
 
-    this->updateGUI("FOX AND RABBIT", 320,20);
+    this->updateGUI("Fox And Rabbit", 420,20);
 }
 
 void Game::render()
@@ -145,6 +150,7 @@ void Game::pollEvents()
         case Event::MouseButtonPressed:
             if (button1.isMouseHover(*window))
             {
+                this->mmMusic.stop();
                 this->window->close();
             }
             if (button2.isMouseHover(*window))

@@ -264,6 +264,16 @@ Level::Level()
     this->initText();
     this->exitButton.initFont(this->font);
     this->initTiles();
+
+    this->levelMusic.openFromFile("level_use.ogg");
+    this->levelMusic.setVolume(20);
+    this->levelMusic.play();
+    this->levelMusic.setLoop(true);
+
+    //this->stepFx.openFromFile("stepdirt_7.ogg");
+    //this->stepFx.setVolume(80);
+
+   
     
     this->initEnemies();
     //this->generateEnemy();
@@ -277,15 +287,17 @@ void Level::update()
         moves = 0;
     }
 
-    //check if rabbits are 50 and above
+    //check if rabbits are 50 and above //LOSS
     if (currentEnemies >= maxEnemies) 
     {
         this->isGameOver = 1;
+        this->isGameWon = 0;
     }
-    //check if no more rabbits
+    //check if no more rabbits  //WIN
     else if (currentEnemies == 0) 
     {
-        this->window2->close();
+        this->isGameOver = 1;
+        this->isGameWon = 1;
     }
 
     this->pollEvents();
@@ -370,6 +382,24 @@ void Level::render()
         */
     }
 
+    //DRAW GAME OVER
+    if (this->isGameOver == 1 && this->isGameWon == 0)
+    {
+        this->gameLost.setString("You Lose!");
+        this->gameLost.setColor(Color::Red);
+        this->gameLost.setPosition(1000.0f, 450.0f);
+        this->window2->draw(this->gameLost);
+    }
+
+    //DRAW GAME WON
+    if (this->isGameOver == 1 && this->isGameWon == 1)
+    {
+        this->gameWon.setString("You Win!");
+        this->gameWon.setColor(Color::Green);
+        this->gameWon.setPosition(1000.0f, 450.0f);
+        this->window2->draw(this->gameWon);
+    }
+
     this->window2->display();
 }
 
@@ -411,120 +441,129 @@ void Level::pollEvents()
             {
                 if (this->event.key.code == Keyboard::Escape)
                     this->window2->close();
-                if (this->event.key.code == Keyboard::W)
+                if (this->isGameOver == 0 && this->isGameWon == 0)
                 {
-                    this->player.spriteMove(10, 3);
-                    if (this->player.playerPos.y <= 15)
+                    if (this->event.key.code == Keyboard::W)
                     {
-                        this->player.playerPos.y = player.playerPos.y;
-                    }
-                    else
-                        this->player.move(0, -34);
-                }
-
-                if (this->event.key.code == Keyboard::A)
-                {
-                    this->player.spriteMove(10, 1);
-                    if (this->player.playerPos.x <= 75)
-                    {
-                        this->player.playerPos.x = player.playerPos.x;
-                    }
-                    else
-                        this->player.move(-37, 0);
-                }
-
-                if (this->event.key.code == Keyboard::S)
-                {
-                    this->player.spriteMove(10, 0);
-                    if (this->player.playerPos.y >= 646)
-                        this->player.playerPos.y = player.playerPos.y;
-                    else
-                        this->player.move(0, 34);
-                }
-
-                if (this->event.key.code == Keyboard::D)
-                {
-                    this->player.spriteMove(10, 2);
-                    if (this->player.playerPos.x >= 748)
-                        this->player.playerPos.x = player.playerPos.x;
-                    else
-                        this->player.move(37, 0);
-                }
-
-                //Eats rabbit when fox ends up in same tile with rabbit (fox moves to same tile)
-                for (int i = 0; i < currentEnemies; i++)
-                {
-                    if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y))
-                    {
-                        for (int j = i; j < (currentEnemies - 1); j++)
-                            enem[j] = enem[j + 1];
-                        i--;
-                        currentEnemies--;
-                        this->player.foxScore++;
-                    }
-                }
-
-                //3 rabbits movement
-                for (int i = 0; i < currentEnemies; i++)
-                {
-                    int rMove = rand() % 4;
-                    //Upwards
-                    if (rMove == 0) {
-                        this->enem[i].spriteMove(0, 0);
-                        if (this->enem[i].rabbitPos.y <= 15)
+                        
+                        this->player.spriteMove(10, 3);
+                        if (this->player.playerPos.y <= 15)
                         {
-                            this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                            this->player.playerPos.y = player.playerPos.y;
                         }
                         else
-                            this->enem[i].move(0, -34);
+                            this->player.move(0, -34);
                     }
-                    //Left
-                    if (rMove == 1) {
-                        this->enem[i].spriteMove(0, 1);
-                        if (this->enem[i].rabbitPos.x <= 62)
-                        {
-                            this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
-                        }
-                        else
-                            this->enem[i].move(-37, 0);
-                    }
-                    //Down
-                    if (rMove == 2) {
-                        this->enem[i].spriteMove(0, 2);
-                        if (this->enem[i].rabbitPos.y >= 646)
-                        {
-                            this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
-                        }
-                        else
-                            this->enem[i].move(0, 34);
-                    }
-                    //Right
-                    if (rMove == 3) {
-                        this->enem[i].spriteMove(0, 3);
-                        if (this->enem[i].rabbitPos.x >= 735)
-                        {
-                            this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
-                        }
-                        else
-                            this->enem[i].move(37, 0);
-                    }
-                }
 
-
-                //Eats rabbit when fox ends up in same tile with rabbit (Collision)
-                for (int i = 0; i < currentEnemies; i++) 
-                {
-                    if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y)) 
+                    if (this->event.key.code == Keyboard::A)
                     {
-                        for(int j = i; j < (currentEnemies-1); j++)
-                            enem[j] = enem[j+1];
-                        i--;
-                        currentEnemies--;
-                        this->player.foxScore++;
+                        
+                        this->player.spriteMove(10, 1);
+                        if (this->player.playerPos.x <= 75)
+                        {
+                            this->player.playerPos.x = player.playerPos.x;
+                        }
+                        else
+                            this->player.move(-37, 0);
                     }
+
+                    if (this->event.key.code == Keyboard::S)
+                    {
+                        
+                        this->player.spriteMove(10, 0);
+                        if (this->player.playerPos.y >= 646)
+                            this->player.playerPos.y = player.playerPos.y;
+                        else
+                            this->player.move(0, 34);
+                    }
+
+                    if (this->event.key.code == Keyboard::D)
+                    {
+                        
+                        this->player.spriteMove(10, 2);
+                        if (this->player.playerPos.x >= 748)
+                            this->player.playerPos.x = player.playerPos.x;
+                        else
+                            this->player.move(37, 0);
+                    }
+
+                    //Eats rabbit when fox ends up in same tile with rabbit (fox moves to same tile)
+                    for (int i = 0; i < currentEnemies; i++)
+                    {
+                        if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y))
+                        {
+                            for (int j = i; j < (currentEnemies - 1); j++)
+                                enem[j] = enem[j + 1];
+                            i--;
+                            currentEnemies--;
+                            this->player.foxScore++;
+                        }
+                    }
+
+                    //3 rabbits movement
+                    for (int i = 0; i < currentEnemies; i++)
+                    {
+                        int rMove = rand() % 4;
+                        //Upwards
+                        if (rMove == 0) {
+                            this->enem[i].spriteMove(0, 0);
+                            if (this->enem[i].rabbitPos.y <= 15)
+                            {
+                                this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                            }
+                            else
+                                this->enem[i].move(0, -34);
+                        }
+                        //Left
+                        if (rMove == 1) {
+                            this->enem[i].spriteMove(0, 1);
+                            if (this->enem[i].rabbitPos.x <= 62)
+                            {
+                                this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
+                            }
+                            else
+                                this->enem[i].move(-37, 0);
+                        }
+                        //Down
+                        if (rMove == 2) {
+                            this->enem[i].spriteMove(0, 2);
+                            if (this->enem[i].rabbitPos.y >= 646)
+                            {
+                                this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                            }
+                            else
+                                this->enem[i].move(0, 34);
+                        }
+                        //Right
+                        if (rMove == 3) {
+                            this->enem[i].spriteMove(0, 3);
+                            if (this->enem[i].rabbitPos.x >= 735)
+                            {
+                                this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
+                            }
+                            else
+                                this->enem[i].move(37, 0);
+                        }
+                    }
+
+
+                    //Eats rabbit when fox ends up in same tile with rabbit (Collision)
+                    for (int i = 0; i < currentEnemies; i++)
+                    {
+                        if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y))
+                        {
+                            for (int j = i; j < (currentEnemies - 1); j++)
+                                enem[j] = enem[j + 1];
+                            i--;
+                            currentEnemies--;
+                            this->player.foxScore++;
+                        }
+                    }
+                    moves++;
+                    break;
                 }
-                moves++;
-                break;
+                else
+                    break; 
             }
             case Event::MouseMoved:
             {
@@ -544,6 +583,7 @@ void Level::pollEvents()
                 {
                     this->window2->close();
                 }
+                break;
             }
             default: 
             {

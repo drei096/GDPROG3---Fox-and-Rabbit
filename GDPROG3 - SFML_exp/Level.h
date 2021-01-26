@@ -31,7 +31,8 @@ private:
 	Sprite grassTile, fenceHSprite, fenceVSprite, houseSprite, house2Sprite, house3Sprite;
 	Fox player;
 	Rabbit enem[100];
-	int isGameOver = 0;
+	int isGameOver = 0, isGameWon = 0;
+	Music levelMusic, stepFx, over, won, eaten;
 
 	vector<vector<GameTile*>> tiles;
 	vector<vector<GameTile*>> dirt;

@@ -26,6 +26,7 @@ private:
 	Text text;
 	Texture bg;
 	Sprite mmBg;
+	Music mmMusic;
 
 public:
 	Button button1, button2;
