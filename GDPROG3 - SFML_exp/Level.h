@@ -32,7 +32,7 @@ private:
 	Fox player;
 	Rabbit enem[100];
 	int isGameOver = 0, isGameWon = 0;
-	Music levelMusic, stepFx, over, won, eaten, bunnyMultiply, exit;
+	Music levelMusic, stepFx, over, won, eaten;
 
 	vector<vector<GameTile*>> tiles;
 	vector<vector<GameTile*>> dirt;

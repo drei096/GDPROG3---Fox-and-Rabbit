@@ -151,16 +151,10 @@ void Game::pollEvents()
             if (button1.isMouseHover(*window))
             {
                 this->mmMusic.stop();
-                this->buttonPress.openFromFile("menupress.ogg");
-                this->buttonPress.setVolume(100);
-                this->buttonPress.play();
                 this->window->close();
             }
             if (button2.isMouseHover(*window))
             {
-                this->buttonPress.openFromFile("menupress.ogg");
-                this->buttonPress.setVolume(100);
-                this->buttonPress.play();
                 this->window->close();
                 exit(0);
             }

@@ -1,13 +1,9 @@
 #include<iostream>
 #include <ctime>
-#include <chrono>
-#include <thread>
 #include "Level.h"
 
 using namespace sf;
 using namespace std;
-using namespace this_thread;
-using namespace chrono;
 
 void Level::initVars()
 {
@@ -277,6 +273,7 @@ Level::Level()
     //this->stepFx.openFromFile("stepdirt_7.ogg");
     //this->stepFx.setVolume(80);
 
+   
     
     this->initEnemies();
     //this->generateEnemy();
@@ -284,24 +281,10 @@ Level::Level()
 
 void Level::update()
 {
-
     //rabbit updater every 3 moves
     if (moves == 3) {
-        this->bunnyMultiply.openFromFile("boing.ogg");
-        this->bunnyMultiply.setVolume(50);
-        this->bunnyMultiply.play();
-
         currentEnemies *= 2;
         moves = 0;
-
-        if (currentEnemies >= maxEnemies)
-        {
-            this->levelMusic.stop();
-            this->over.openFromFile("game_over.ogg");
-            this->over.setVolume(30);
-            this->over.play();
-        }
-        
     }
 
     //check if rabbits are 50 and above //LOSS
@@ -313,10 +296,6 @@ void Level::update()
     //check if no more rabbits  //WIN
     else if (currentEnemies == 0) 
     {
-        this->won.openFromFile("win.ogg");
-        this->won.setVolume(30);
-        this->won.play();
-
         this->isGameOver = 1;
         this->isGameWon = 1;
     }
@@ -466,10 +445,6 @@ void Level::pollEvents()
                 {
                     if (this->event.key.code == Keyboard::W)
                     {
-                        this->stepFx.openFromFile("stepdirt.ogg");
-                        this->stepFx.setVolume(50);
-                        this->stepFx.play();
-                        this->stepFx.setLoop(false);
                         
                         this->player.spriteMove(10, 3);
                         if (this->player.playerPos.y <= 15)
@@ -482,10 +457,6 @@ void Level::pollEvents()
 
                     if (this->event.key.code == Keyboard::A)
                     {
-                        this->stepFx.openFromFile("stepdirt.ogg");
-                        this->stepFx.setVolume(50);
-                        this->stepFx.play();
-                        this->stepFx.setLoop(false);
                         
                         this->player.spriteMove(10, 1);
                         if (this->player.playerPos.x <= 75)
@@ -498,10 +469,6 @@ void Level::pollEvents()
 
                     if (this->event.key.code == Keyboard::S)
                     {
-                        this->stepFx.openFromFile("stepdirt.ogg");
-                        this->stepFx.setVolume(50);
-                        this->stepFx.play();
-                        this->stepFx.setLoop(false);
                         
                         this->player.spriteMove(10, 0);
                         if (this->player.playerPos.y >= 646)
@@ -512,10 +479,6 @@ void Level::pollEvents()
 
                     if (this->event.key.code == Keyboard::D)
                     {
-                        this->stepFx.openFromFile("stepdirt.ogg");
-                        this->stepFx.setVolume(50);
-                        this->stepFx.play();
-                        this->stepFx.setLoop(false);
                         
                         this->player.spriteMove(10, 2);
                         if (this->player.playerPos.x >= 748)
@@ -529,12 +492,6 @@ void Level::pollEvents()
                     {
                         if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y))
                         {
-
-                            this->eaten.openFromFile("eat.ogg");
-                            this->eaten.setVolume(50);
-                            this->eaten.play();
-                            this->eaten.setLoop(false);
-
                             for (int j = i; j < (currentEnemies - 1); j++)
                                 enem[j] = enem[j + 1];
                             i--;
@@ -595,10 +552,6 @@ void Level::pollEvents()
                     {
                         if ((player.playerPos.x - 13 == enem[i].rabbitPos.x) && (player.playerPos.y == enem[i].rabbitPos.y))
                         {
-                            this->eaten.openFromFile("eat.ogg");
-                            this->eaten.setVolume(50);
-                            this->eaten.play();
-                            this->eaten.setLoop(false);
                             for (int j = i; j < (currentEnemies - 1); j++)
                                 enem[j] = enem[j + 1];
                             i--;
@@ -628,13 +581,6 @@ void Level::pollEvents()
             {
                 if (exitButton.isMouseHover(*window2))
                 {
-                    this->exit.openFromFile("menupress.ogg");
-                    this->exit.setVolume(100);
-                    this->exit.play();
-
-                    //sleep_for(milliseconds(3000 ));
-                    //sleep_until(system_clock::now() + milliseconds(3000));
-
                     this->window2->close();
                 }
                 break;
