@@ -37,7 +37,6 @@ private:
 	void initFont();
 	void initText();
 	void initBg();
-	//void generateEnemy();
 public:
 	Game();
 	void update();

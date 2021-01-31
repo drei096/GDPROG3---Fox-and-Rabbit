@@ -55,7 +55,6 @@ private:
 	void initText();
 	void initTiles();
 	
-	//void generateEnemy();
 public:
 	Level();
 	void update(); 
@@ -63,9 +62,6 @@ public:
 	void renderGUI(RenderTarget* target);
 	void pollEvents();
 	const bool isWindowOpen() const;
-	//void spawnEnemies();
 	void updateGUI();
-	void initEnemies();
-	void updateEnemies();
 };
 

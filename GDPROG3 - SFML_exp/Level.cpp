@@ -58,9 +58,6 @@ void Level::initText()
     this->gameLost.setCharacterSize(24);
     this->gameWon.setCharacterSize(24);
     
-    
-    //this->text.setPosition(20.0f, 20.0f);
-    //this->text.setString("Health:");
 }
 
 void Level::initTiles() //we draw here the game tiles
@@ -178,39 +175,6 @@ void Level::initTiles() //we draw here the game tiles
     this->house3Sprite.setPosition(590.0f, -60.0f);
 }
 
-
-/*
-void Game::spawnEnemies()
-{
-    
-    if (this->spawnTimer < this->maxSpawnTimer)
-    {
-        this->spawnTimer += 1.0f;
-    }
-    else
-    {
-    
-        if (this->enemies.size() < this->maxEnemies)
-        {
-            this->enemies.push_back(Enemy());
-            cout << this->enemies.size();
-            //this->spawnTimer = 0.0f;
-        }
-    }
-}
-*/
-
-void Level::initEnemies()
-{
-    this->maxSpawnTimer = 40.0f;
-    this->spawnTimer = this->maxSpawnTimer;
-}
-
-void Level::updateEnemies()
-{
-    
-}
-
 void Level::renderGUI(RenderTarget *target)
 {
     target->draw(this->ctrlUp);
@@ -274,12 +238,6 @@ Level::Level()
     this->levelMusic.play();
     this->levelMusic.setLoop(true);
 
-    //this->stepFx.openFromFile("stepdirt_7.ogg");
-    //this->stepFx.setVolume(80);
-
-    
-    this->initEnemies();
-    //this->generateEnemy();
 }
 
 void Level::update()
@@ -322,9 +280,7 @@ void Level::update()
     }
 
     this->pollEvents();
-    //this->spawnEnemies();
-
-    //this->updateEnemies();
+    
     this->updateGUI();
 }
 
@@ -385,22 +341,6 @@ void Level::render()
                 enem[j] = enem[j + 1];
             i--;
         }
-
-        //check if rabbit spawns on top of another rabbit
-        //ISSUES: Naghhang pag masyado na maraming rabbit
-        /*
-        for (int k = 0; k < i; k++) 
-        {
-            if ((enem[k].rabbitPos.x == enem[i].rabbitPos.x) && (enem[k].rabbitPos.y == enem[i].rabbitPos.y))
-            {
-                for (int j = i; j < (currentEnemies - 1); j++) 
-                {
-                    enem[j] = enem[j + 1];
-                }
-                i--;
-            }
-        }
-        */
     }
 
     //DRAW GAME OVER
@@ -424,22 +364,11 @@ void Level::render()
     this->window2->display();
 }
 
-/*
-void Game::generateEnemy()
-{
-    this->enemy.setPosition(50.0f, 50.0f);
-    this->enemy.setSize(Vector2f(100.0f, 100.0f));
-    this->enemy.setFillColor(Color::Cyan);
-}
-*/
-
 
 const bool Level::isWindowOpen() const
 {
 	return this->window2->isOpen();
 }
-
-
 
 void Level::pollEvents()
 {

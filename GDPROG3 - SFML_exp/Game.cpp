@@ -19,7 +19,6 @@ void Game::initText()
     this->text.setFont(this->font);
     this->text.setFillColor(Color::White);
     this->text.setCharacterSize(24);
-    //this->text.setPosition(20.0f, 20.0f);
 }
 
 void Game::initBg()
@@ -70,13 +69,11 @@ Game::Game()
     this->mmMusic.setVolume(20);
     this->mmMusic.play();
     this->mmMusic.setLoop(true);
-    //this->generateEnemy();
 }
 
 void Game::update()
 {
     this->pollEvents();
-    //this->spawnEnemies();
     this->updateMousePos();
 
     this->updateGUI("Fox And Rabbit", 420,20);
@@ -92,8 +89,6 @@ void Game::render()
     this->renderGUI(this->window);
     this->button1.renderButton(this->window, "Play!", 530, 190, 575, 230);
     this->button2.renderButton(this->window, "Exit!", 530, 600, 575, 640);
-    //this->enemy.render(this->window);
-    //this->window->draw(this->enemy);
 
     this->window->display();
 }
