@@ -193,14 +193,18 @@ void Level::updateGUI()
     score = to_string(this->player.foxScore);
     enemCount = to_string(currentEnemies);
 
-   this->ctrlUp.setString("W: Up");
+   this->ctrlUp.setString("Arrow Up: Up");
    this->ctrlUp.setPosition(1000.0f, 50.0f);
-   this->ctrlDown.setString("A: Left");
+   this->ctrlUp.setCharacterSize(15);
+   this->ctrlDown.setString("Arrow Left: Left");
    this->ctrlDown.setPosition(1000.0f, 100.0f);
-   this->ctrlLeft.setString("S: Down");
+   this->ctrlDown.setCharacterSize(15);
+   this->ctrlLeft.setString("Arrow Down: Down");
    this->ctrlLeft.setPosition(1000.0f, 150.0f);
-   this->ctrlRight.setString("D: Right");
+   this->ctrlLeft.setCharacterSize(15);
+   this->ctrlRight.setString("Arrow Right: Right");
    this->ctrlRight.setPosition(1000.0f, 200.0f);
+   this->ctrlRight.setCharacterSize(15);
 
    this->scoreText1.setString("Score:");
    this->scoreText1.setColor(Color::Green);
@@ -393,8 +397,9 @@ void Level::pollEvents()
                     this->window2->close();
                 if (this->isGameOver == 0 && this->isGameWon == 0)
                 {
-                    if (this->event.key.code == Keyboard::W)
+                    if (this->event.key.code == Keyboard::Up)
                     {
+                        moves++;
                         this->stepFx.openFromFile("stepdirt.ogg");
                         this->stepFx.setVolume(50);
                         this->stepFx.play();
@@ -409,8 +414,9 @@ void Level::pollEvents()
                             this->player.move(0, -34);
                     }
 
-                    if (this->event.key.code == Keyboard::A)
+                    if (this->event.key.code == Keyboard::Left)
                     {
+                        moves++;
                         this->stepFx.openFromFile("stepdirt.ogg");
                         this->stepFx.setVolume(50);
                         this->stepFx.play();
@@ -425,8 +431,9 @@ void Level::pollEvents()
                             this->player.move(-37, 0);
                     }
 
-                    if (this->event.key.code == Keyboard::S)
+                    if (this->event.key.code == Keyboard::Down)
                     {
+                        moves++;
                         this->stepFx.openFromFile("stepdirt.ogg");
                         this->stepFx.setVolume(50);
                         this->stepFx.play();
@@ -439,8 +446,9 @@ void Level::pollEvents()
                             this->player.move(0, 34);
                     }
 
-                    if (this->event.key.code == Keyboard::D)
+                    if (this->event.key.code == Keyboard::Right)
                     {
+                        moves++;
                         this->stepFx.openFromFile("stepdirt.ogg");
                         this->stepFx.setVolume(50);
                         this->stepFx.play();
@@ -472,53 +480,56 @@ void Level::pollEvents()
                         }
                     }
 
-                    //3 rabbits movement
-                    for (int i = 0; i < currentEnemies; i++)
+                    if ((this->event.key.code == Keyboard::Right) || (this->event.key.code == Keyboard::Down)
+                        || (this->event.key.code == Keyboard::Left) || (this->event.key.code == Keyboard::Up))
                     {
-                        int rMove = rand() % 4;
-                        //Upwards
-                        if (rMove == 0) {
-                            this->enem[i].spriteMove(0, 0);
-                            if (this->enem[i].rabbitPos.y <= 15)
-                            {
-                                this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                        //3 rabbits movement
+                        for (int i = 0; i < currentEnemies; i++)
+                        {
+                            int rMove = rand() % 4;
+                            //Upwards
+                            if (rMove == 0) {
+                                this->enem[i].spriteMove(0, 0);
+                                if (this->enem[i].rabbitPos.y <= 15)
+                                {
+                                    this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                                }
+                                else
+                                    this->enem[i].move(0, -34);
                             }
-                            else
-                                this->enem[i].move(0, -34);
-                        }
-                        //Left
-                        if (rMove == 1) {
-                            this->enem[i].spriteMove(0, 1);
-                            if (this->enem[i].rabbitPos.x <= 62)
-                            {
-                                this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
+                            //Left
+                            if (rMove == 1) {
+                                this->enem[i].spriteMove(0, 1);
+                                if (this->enem[i].rabbitPos.x <= 62)
+                                {
+                                    this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
+                                }
+                                else
+                                    this->enem[i].move(-37, 0);
                             }
-                            else
-                                this->enem[i].move(-37, 0);
-                        }
-                        //Down
-                        if (rMove == 2) {
-                            this->enem[i].spriteMove(0, 2);
-                            if (this->enem[i].rabbitPos.y >= 646)
-                            {
-                                this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                            //Down
+                            if (rMove == 2) {
+                                this->enem[i].spriteMove(0, 2);
+                                if (this->enem[i].rabbitPos.y >= 646)
+                                {
+                                    this->enem[i].rabbitPos.y = enem[i].rabbitPos.y;
+                                }
+                                else
+                                    this->enem[i].move(0, 34);
                             }
-                            else
-                                this->enem[i].move(0, 34);
-                        }
-                        //Right
-                        if (rMove == 3) {
-                            this->enem[i].spriteMove(0, 3);
-                            if (this->enem[i].rabbitPos.x >= 735)
-                            {
-                                this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
+                            //Right
+                            if (rMove == 3) {
+                                this->enem[i].spriteMove(0, 3);
+                                if (this->enem[i].rabbitPos.x >= 735)
+                                {
+                                    this->enem[i].rabbitPos.x = enem[i].rabbitPos.x;
+                                }
+                                else
+                                    this->enem[i].move(37, 0);
                             }
-                            else
-                                this->enem[i].move(37, 0);
                         }
                     }
-
-
+                    
                     //Eats rabbit when fox ends up in same tile with rabbit (Collision)
                     for (int i = 0; i < currentEnemies; i++)
                     {
@@ -535,7 +546,7 @@ void Level::pollEvents()
                             this->player.foxScore++;
                         }
                     }
-                    moves++;
+                    
                     break;
                 }
                 else
